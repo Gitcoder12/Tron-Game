@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tron Game</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Courier New', monospace; color: #00f5ff; }
+  h1 { font-size: 2rem; letter-spacing: 0.3em; text-shadow: 0 0 20px #00f5ff; margin-bottom: 8px; }
+  #score-board { display: flex; gap: 40px; margin-bottom: 12px; font-size: 0.9rem; letter-spacing: 0.1em; }
+  .score-item span { color: #fff; font-weight: bold; }
+  #canvas { border: 1px solid #00f5ff; box-shadow: 0 0 30px #00f5ff44, inset 0 0 30px #00001a; display: block; }
+  #overlay { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+  #overlay h2 { font-size: 1.8rem; letter-spacing: 0.2em; text-shadow: 0 0 20px currentColor; }
+  #overlay p { font-size: 0.8rem; opacity: 0.7; letter-spacing: 0.1em; text-align: center; }
+  #start-btn { margin-top: 8px; padding: 10px 32px; background: transparent; border: 1px solid #00f5ff; color: #00f5ff; font-family: inherit; font-size: 1rem; letter-spacing: 0.2em; cursor: pointer; text-shadow: 0 0 10px #00f5ff; box-shadow: 0 0 15px #00f5ff44; transition: all 0.2s; }
+  #start-btn:hover { background: #00f5ff22; box-shadow: 0 0 25px #00f5ff88; }
+  #controls { margin-top: 10px; font-size: 0.75rem; opacity: 0.5; letter-spacing: 0.1em; }
+  .wrap { position: relative; }
+</style>
+</head>
+<body>
+<h1>TRON</h1>
+<div id="score-board">
+  <div class="score-item">P1 WINS: <span id="p1-score">0</span></div>
+  <div class="score-item">P2 WINS: <span id="p2-score">0</span></div>
+</div>
+<div class="wrap">
+  <canvas id="canvas" width="600" height="500"></canvas>
+  <div id="overlay">
+    <h2 id="overlay-title" style="color:#00f5ff">TRON</h2>
+    <p id="overlay-msg">Two players. One grid. Leave no escape.</p>
+    <button id="start-btn">START GAME</button>
+    <p id="controls">P1: WASD &nbsp;|&nbsp; P2: ARROW KEYS</p>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const overlay = document.getElementById('overlay');
+const startBtn = document.getElementById('start-btn');
+const overlayTitle = document.getElementById('overlay-title');
+const overlayMsg = document.getElementById('overlay-msg');
+
+const CELL = 10;
+const COLS = canvas.width / CELL;
+const ROWS = canvas.height / CELL;
+const SPEED = 80; // ms per tick
+
+const COLORS = { p1: '#00f5ff', p2: '#ff3e6c' };
+
+let grid, players, gameLoop, scores = { p1: 0, p2: 0 };
+let gameRunning = false;
+
+const DIRS = {
+  ArrowUp:    { x: 0, y: -1 }, ArrowDown:  { x: 0, y: 1 },
+  ArrowLeft:  { x: -1, y: 0 }, ArrowRight: { x: 1, y: 0 },
+  w: { x: 0, y: -1 }, s: { x: 0, y: 1 },
+  a: { x: -1, y: 0 }, d: { x: 1, y: 0 }
+};
+
+const OPPOSITE = { x: 1, ox: -1, y: 1, oy: -1 };
+
+function initGame() {
+  grid = Array.from({ length: ROWS }, () => new Array(COLS).fill(0));
+  players = [
+    { x: Math.floor(COLS * 0.25), y: Math.floor(ROWS / 2), dir: { x: 1, y: 0 }, nextDir: { x: 1, y: 0 }, color: COLORS.p1, id: 1, alive: true },
+    { x: Math.floor(COLS * 0.75), y: Math.floor(ROWS / 2), dir: { x: -1, y: 0 }, nextDir: { x: -1, y: 0 }, color: COLORS.p2, id: 2, alive: true }
+  ];
+  players.forEach(p => { grid[p.y][p.x] = p.id; });
+}
+
+function drawCell(x, y, color, isHead = false) {
+  ctx.fillStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = isHead ? 18 : 6;
+  ctx.fillRect(x * CELL + 1, y * CELL + 1, CELL - 2, CELL - 2);
+  ctx.shadowBlur = 0;
+}
+
+function drawGrid() {
+  ctx.fillStyle = '#0a0a0f';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // subtle grid lines
+  ctx.strokeStyle = '#ffffff08';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x <= COLS; x++) { ctx.beginPath(); ctx.moveTo(x * CELL, 0); ctx.lineTo(x * CELL, canvas.height); ctx.stroke(); }
+  for (let y = 0; y <= ROWS; y++) { ctx.beginPath(); ctx.moveTo(0, y * CELL); ctx.lineTo(canvas.width, y * CELL); ctx.stroke(); }
+
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      if (grid[r][c] === 1) drawCell(c, r, COLORS.p1 + '99');
+      else if (grid[r][c] === 2) drawCell(c, r, COLORS.p2 + '99');
+    }
+  }
+  players.forEach(p => { if (p.alive) drawCell(p.x, p.y, p.color, true); });
+}
+
+function tick() {
+  players.forEach(p => {
+    if (!p.alive) return;
+    // apply queued direction (prevent 180)
+    const nd = p.nextDir;
+    if (!(nd.x === -p.dir.x && nd.y === -p.dir.y)) p.dir = nd;
+
+    const nx = p.x + p.dir.x;
+    const ny = p.y + p.dir.y;
+
+    if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS || grid[ny][nx] !== 0) {
+      p.alive = false;
+    } else {
+      p.x = nx; p.y = ny;
+      grid[p.y][p.x] = p.id;
+    }
+  });
+
+  drawGrid();
+
+  const alive = players.filter(p => p.alive);
+  if (alive.length < 2) {
+    clearInterval(gameLoop);
+    gameRunning = false;
+    if (alive.length === 1) {
+      const winner = alive[0];
+      scores[`p${winner.id}`]++;
+      document.getElementById(`p${winner.id}-score`).textContent = scores[`p${winner.id}`];
+      overlayTitle.style.color = winner.color;
+      overlayTitle.textContent = `PLAYER ${winner.id} WINS`;
+      overlayMsg.textContent = `The grid belongs to P${winner.id}.`;
+    } else {
+      overlayTitle.style.color = '#fff';
+      overlayTitle.textContent = 'DRAW';
+      overlayMsg.textContent = 'Both lines collided simultaneously.';
+    }
+    startBtn.textContent = 'PLAY AGAIN';
+    overlay.style.display = 'flex';
+  }
+}
+
+startBtn.addEventListener('click', () => {
+  overlay.style.display = 'none';
+  initGame();
+  drawGrid();
+  gameRunning = true;
+  gameLoop = setInterval(tick, SPEED);
+});
+
+document.addEventListener('keydown', e => {
+  if (!gameRunning) return;
+  const dir = DIRS[e.key];
+  if (!dir) return;
+  e.preventDefault();
+  const p1Keys = ['w','a','s','d'];
+  const p2Keys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
+  if (p1Keys.includes(e.key)) players[0].nextDir = dir;
+  else if (p2Keys.includes(e.key)) players[1].nextDir = dir;
+});
+
+// initial draw
+ctx.fillStyle = '#0a0a0f';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+</script>
+</body>
+</html>
