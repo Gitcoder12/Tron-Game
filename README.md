@@ -1,24 +1,37 @@
 # Tron Game
 
-Two-player Tron light-cycle game in a single HTML file. No dependencies, no install.
+**A two-player light-cycle game that runs in a browser.**
+
+[![License](https://img.shields.io/badge/license-see%20LICENSE-lightgrey)](LICENSE)
+
+Tron Game is a small, dependency-free HTML5 Canvas game. Two players steer light cycles around a grid, leaving trails that become obstacles.
 
 ## Play
 
-Open `index.html` in any browser.
+Open `index.html` in a modern browser. No installation or build step is required.
 
 | Player | Controls |
-|--------|----------|
-| P1 (Cyan) | `W A S D` |
-| P2 (Red) | `↑ ↓ ← →` |
+|---|---|
+| Player 1 | `W`, `A`, `S`, `D` |
+| Player 2 | `↑`, `↓`, `←`, `→` |
 
 ## Rules
 
-Move your light cycle across the grid. Your trail is a wall. Hit any wall — yours, your opponent's, or the boundary — and you lose. Last cycle alive wins.
+- Each cycle leaves a persistent trail.
+- A cycle loses when it collides with a wall, boundary, or either trail.
+- The last player still moving wins.
 
-## Stack
+## Tech Stack
 
-Vanilla HTML5 Canvas + JavaScript. Zero dependencies.
+HTML · CSS · JavaScript · HTML5 Canvas
 
-## Author
+## Project Structure
 
-Dharavath Satvik — [github.com/Gitcoder12](https://github.com/Gitcoder12)
+```text
+Tron-Game/
+└── index.html
+```
+
+## License
+
+See [LICENSE](LICENSE).
