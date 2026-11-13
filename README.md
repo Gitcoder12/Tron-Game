@@ -1,60 +1,37 @@
 # Tron Game
 
-**A two-player light-cycle game that runs in a browser.**
-
-[![License](https://img.shields.io/badge/license-see%20LICENSE-lightgrey)](LICENSE)
-
-Tron Game is a small, dependency-free HTML5 Canvas game. Two players steer light cycles around a grid, leaving trails that become obstacles.
+Two-player Tron light-cycle game in a single HTML file. No dependencies, no install.
 
 ## Play
 
-Open `index.html` in a modern browser. No installation or build step is required.
+Open `index.html` in any browser.
 
 | Player | Controls |
-|---|---|
-| Player 1 | `W`, `A`, `S`, `D` |
-| Player 2 | `↑`, `↓`, `←`, `→` |
+|--------|----------|
+| P1 (Cyan) | `W A S D` |
+| P2 (Red) | `↑ ↓ ← →` |
 
 ## Rules
 
-- Each cycle leaves a persistent trail.
-- A cycle loses when it collides with a wall, boundary, or either trail.
-- The last player still moving wins.
+Move your light cycle across the grid. Your trail is a wall. Hit any wall — yours, your opponent's, or the boundary — and you lose. Last cycle alive wins.
 
-## Tech Stack
+## Stack
 
-HTML · CSS · JavaScript · HTML5 Canvas
+Vanilla HTML5 Canvas + JavaScript. Zero dependencies.
 
-## Project Structure
+## Author
 
-```text
-Tron-Game/
-└── index.html
-```
+Dharavath Satvik — [github.com/Gitcoder12](https://github.com/Gitcoder12)
 
-## License
-
-See [LICENSE](LICENSE).
 
 ---
 
-## Project handbook
+## AI-maintained project notes (secondary — 2026-11-13)
 
-- [Activity log](ACTIVITY_LOG.md) · [Feature upgrade plan](FEATURE_UPGRADE_PLAN.md)
-- [Company and team fit](COMPANY_FIT.md) · [README explanation draft](README_ADDENDUM_DRAFT.md)
-- [README quality checklist](README_QUALITY_CHECKLIST.md)
-- [Contributing](CONTRIBUTING.md) · [Agent instructions](AGENTS.md) · [Agent skills](SKILLS.md)
+This section supplements the maintainer-authored README above. The original text has been restored verbatim from Git-history baseline `f72c8b7fdcde5ba96083de127731d04f03f93db1`; this addendum does not replace or certify the original claims.
 
-## Understanding the project
-
-### In plain language
-
-A two-player browser game where light cycles move around a grid and lose when they hit a wall or a trail.
-
-### Technical and research view
-
-A dependency-free HTML5 Canvas game in a single-page application. Player one uses WASD and player two uses the arrow keys. Each cycle leaves a persistent collision trail. It is a small game project, not a multiplayer network service.
-
-Document the update loop, input-state model, coordinate system, collision detection and restart lifecycle from the source code. Do not describe network multiplayer or features that are not implemented.
-
-See [FEATURE_UPGRADE_PLAN.md](FEATURE_UPGRADE_PLAN.md), [ACTIVITY_LOG.md](ACTIVITY_LOG.md), [COMPANY_FIT.md](COMPANY_FIT.md) and [CONTRIBUTING.md](CONTRIBUTING.md) for technical depth and collaboration details.
+- The current source tree, runtime data and tests are the implementation source of truth. Roadmap items, draft PRs and AI-generated descriptions are not shipped features by themselves.
+- Preserve real and maintainer-provided data. Never silently substitute generated or placeholder data. Clearly label and isolate synthetic fixtures.
+- Mark unverified sources, identifiers, metrics, benchmark results and external claims as unknown/unverified rather than guessing.
+- Verify setup, execution, tests and public claims against the exact current commit before using this repository in a job, research or academic application.
+- See [MODEL_AUDIT_ROUTER.md](MODEL_AUDIT_ROUTER.md) for independent model review instructions and the merge gate.
