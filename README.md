@@ -35,3 +35,20 @@ This section supplements the maintainer-authored README above. The original text
 - Mark unverified sources, identifiers, metrics, benchmark results and external claims as unknown/unverified rather than guessing.
 - Verify setup, execution, tests and public claims against the exact current commit before using this repository in a job, research or academic application.
 - See [MODEL_AUDIT_ROUTER.md](MODEL_AUDIT_ROUTER.md) for independent model review instructions and the merge gate.
+
+---
+
+## Engineering Audit & Handover — 2026-11-17
+
+**Reviewed commit:** `2dd8ec3c356c538a53e8ace52515d37a8f665cab` (`main`).
+
+### Confirmed findings
+- The reviewed implementation is a single-file browser game (`index.html`) with no automated test suite in the reviewed tree.
+- The README accurately describes a local two-player game and keyboard controls; collision, restart, and simultaneous-input behavior have not been independently verified in this audit.
+
+### Next actions
+1. Add a small deterministic test harness for movement, wall/trail collision, and winner selection.
+2. Verify keyboard behavior and responsive layout across desktop browsers.
+3. Document any known limitations such as touch/mobile controls if they are not supported.
+
+**Verification status:** source-tree inspection only; no browser play-through or automated test was run.
