@@ -52,3 +52,10 @@ This section supplements the maintainer-authored README above. The original text
 3. Document any known limitations such as touch/mobile controls if they are not supported.
 
 **Verification status:** source-tree inspection only; no browser play-through or automated test was run.
+
+---
+
+## Examples Used
+- Two light cycles competing in a grid arena
+- Detecting a collision with a trail or boundary
+- Determining the last surviving player
