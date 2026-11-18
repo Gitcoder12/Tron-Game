@@ -52,3 +52,22 @@ This section supplements the maintainer-authored README above. The original text
 3. Document any known limitations such as touch/mobile controls if they are not supported.
 
 **Verification status:** source-tree inspection only; no browser play-through or automated test was run.
+
+
+---
+
+## Branch Activity & Development History
+
+**Audit date:** 2026-11-18 · **Comparison base:** `main`
+
+| Branch | Difference from `main` | Observed work / changed paths |
+|---|---:|---|
+| `docs/portfolio-operating-kit-2026-11-13` | 4 ahead / 3 behind | Activity log, agent guidance, company-fit notes, feature plan, README support docs and skills; README has both additions and removals |
+| `docs/project-status-audit20261116` | Comparison unavailable | GitHub returned 404 for the comparison; recheck branch existence |
+
+### Open pull requests observed during this audit
+
+- [PR #2 — project status snapshot](https://github.com/Gitcoder12/Tron-Game/pull/2)
+- [PR #1 — project roadmap, activity log and agent guides](https://github.com/Gitcoder12/Tron-Game/pull/1)
+
+**Review note:** The portfolio branch changes README content as well as adding docs. Inspect its diff before merging. No branches have been merged or deleted by this documentation update.
