@@ -59,3 +59,27 @@ This section supplements the maintainer-authored README above. The original text
 - Two light cycles competing in a grid arena
 - Detecting a collision with a trail or boundary
 - Determining the last surviving player
+
+
+---
+
+## Comparison with Existing Open-Source Projects
+
+Tron Game is a small, browser-based two-player light-cycle game implemented in a single HTML file. The following projects are useful comparisons for implementation approach and game-development infrastructure rather than exact feature competitors.
+
+| Project | Established focus | Relationship to Tron Game |
+|---|---|---|
+| [Phaser](https://github.com/phaserjs/phaser) | Full-featured 2D HTML5 game framework | Provides scenes, input, physics and asset tooling; this project deliberately avoids a framework for a compact single-file game. |
+| [PixiJS](https://github.com/pixijs/pixijs) | High-performance 2D WebGL renderer | A rendering library rather than a ready-made Tron game; the current project uses the browser Canvas API directly. |
+| [raylib](https://github.com/raysan5/raylib) | Simple cross-platform game-development library | A broader native game-development toolkit; this project targets immediate browser play with no installation. |
+
+### Where Tron Game is different
+- **Zero-install browser play:** the documented game opens directly from index.html without a build step or dependency installation.
+- **Two-player local controls:** both players share one keyboard and one grid arena, keeping the core game loop easy to understand.
+- **Minimal implementation:** Canvas and vanilla JavaScript keep the project small and approachable for studying collision and movement logic.
+
+### Where established projects are stronger
+Phaser, PixiJS and raylib provide far richer rendering, input, asset, audio and cross-platform facilities. Tron Game does not claim to compete with those frameworks; its value is a small, inspectable example of a classic local multiplayer game.
+
+### Evidence and limitations
+This comparison is based on the README's single-file implementation description. Feature parity, frame-rate behavior, browser compatibility, accessibility and mobile/touch controls have not been benchmarked here. Add deterministic tests for movement, collision, simultaneous inputs and winner selection before making reliability claims.
