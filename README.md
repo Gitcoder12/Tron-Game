@@ -2,9 +2,17 @@
 
 Two-player Tron light-cycle game in a single HTML file. No dependencies, no install.
 
-## Play
+## Open and play locally
 
-Open `index.html` in any browser.
+1. Open the project folder in VS Code.
+2. In the terminal, run:
+
+```bash
+python -m http.server 8000
+```
+
+3. Open **http://localhost:8000** in your browser. You can also open `index.html` directly because this is a self-contained, dependency-free page.
+4. Keep the terminal running while you play; press **Ctrl+C** to stop the local server.
 
 | Player | Controls |
 |--------|----------|
