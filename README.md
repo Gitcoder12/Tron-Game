@@ -59,3 +59,9 @@ This section supplements the maintainer-authored README above. The original text
 - Two light cycles competing in a grid arena
 - Detecting a collision with a trail or boundary
 - Determining the last surviving player
+
+---
+
+## Repository navigation
+
+[Alphabetical file index](FILE_INDEX.md)
